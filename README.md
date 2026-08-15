@@ -4,10 +4,14 @@ Entregáveis do case **Oportunidades de Inovação Futura** para o processo sele
 
 ## Arquivos
 
-| Arquivo | Uso |
-|---|---|
-| [`ENTREGAVEL-breve-proposta-biocircle.md`](./ENTREGAVEL-breve-proposta-biocircle.md) | **Versão breve** — adequada para envio no processo seletivo |
-| [`proposta-stellantis-cenario2-biocircle.md`](./proposta-stellantis-cenario2-biocircle.md) | **Versão completa** — apoio para estudo e entrevista |
+| Documento | Markdown | PDF (para enviar) |
+|---|---|---|
+| **Versão breve** — adequada para envio no processo seletivo | [`.md`](./ENTREGAVEL-breve-proposta-biocircle.md) | [`.pdf`](./ENTREGAVEL-breve-proposta-biocircle.pdf) |
+| **Versão completa** — apoio para estudo e entrevista | [`.md`](./proposta-stellantis-cenario2-biocircle.md) | [`.pdf`](./proposta-stellantis-cenario2-biocircle.pdf) |
+| **Índice** deste repositório | [`.md`](./README.md) | [`.pdf`](./README.pdf) |
+
+> Os PDFs têm capa, tipografia e tabelas estilizadas para um visual profissional.
+> Para regenerá-los após editar os markdowns: `python3 build_pdfs.py` (requer `markdown` + Google Chrome).
 
 ## Ideia central
 
