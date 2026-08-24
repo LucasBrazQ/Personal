@@ -1,0 +1,5 @@
+*.pem
+*.p8
+*.key
+client_secret.txt
+.env
