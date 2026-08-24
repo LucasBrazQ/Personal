@@ -1,0 +1,5 @@
+.databox-state.json
+.env
+__pycache__/
+*.pyc
+.venv/

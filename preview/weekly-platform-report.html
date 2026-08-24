@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Pilates Anytime — weekly platform report (Databox spec)</title>
+  <style>
+    :root {
+      --border: #c5cdd6;
+      --header: #1f2a37;
+      --cpa: #d7edd8;
+      --wow-alert: #f8e3c4;
+    }
+    body {
+      font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+      color: #1f2a37;
+      margin: 32px;
+      max-width: 1100px;
+    }
+    h1 { font-size: 22px; margin: 0 0 8px; }
+    p { color: #4b5563; line-height: 1.45; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { border: 1px solid var(--border); padding: 8px 10px; }
+    thead th { background: #f3f5f7; text-align: center; }
+    .group { font-size: 13px; letter-spacing: 0.02em; }
+    td:first-child { text-align: left; font-weight: 500; white-space: nowrap; }
+    td { text-align: right; }
+    .cpa { background: var(--cpa); }
+    .total { font-weight: 700; }
+    .spacer td { border-left: none; border-right: none; height: 10px; }
+    .note { font-size: 13px; }
+  </style>
+</head>
+<body>
+  <h1>Pilates Anytime — weekly paid media</h1>
+  <p class="note">
+    Visual spec for the Databox Table datablock. Meta Ads numbers are from the
+    8/16–8/22 and 8/2–8/8 windows (Complete Registration as acquisitions).
+    Other platforms stay blank until Google, Microsoft, and Apple data are pushed.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Source</th>
+        <th class="group" colspan="3">Current Week<br />8/16/2026 – 8/22/26</th>
+        <th class="group" colspan="3">Prior Week<br />8/2/26 – 8/8/26</th>
+        <th class="group" colspan="3">WoW % Difference</th>
+      </tr>
+      <tr>
+        <th>Acquisitions</th><th>Spend</th><th class="cpa">CPA</th>
+        <th>Acquisitions</th><th>Spend</th><th class="cpa">CPA</th>
+        <th>Acquisitions</th><th>Spend</th><th class="cpa">CPA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Google Search Ads (Non-Brand)</td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+      </tr>
+      <tr>
+        <td>Meta Ads</td>
+        <td>169</td><td>$15,997</td><td class="cpa">$95</td>
+        <td>141</td><td>$14,135</td><td class="cpa">$100</td>
+        <td>20%</td><td>13%</td><td class="cpa">-5%</td>
+      </tr>
+      <tr>
+        <td>Microsoft Search Ads (Branded)</td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+      </tr>
+      <tr class="spacer"><td colspan="10"></td></tr>
+      <tr>
+        <td>Google Search Ads (Brand)</td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+      </tr>
+      <tr class="spacer"><td colspan="10"></td></tr>
+      <tr>
+        <td>Apple Ads</td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+        <td></td><td></td><td class="cpa"></td>
+      </tr>
+      <tr class="total">
+        <td>TOTAL</td>
+        <td>169</td><td>$15,997</td><td class="cpa">$95</td>
+        <td>141</td><td>$14,135</td><td class="cpa">$100</td>
+        <td>20%</td><td>13%</td><td class="cpa">-5%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">
+    Totals here are Meta-only. The client spreadsheet total for 8/16–8/22 was
+    482 acquisitions, $32,872 spend, $68 CPA once every platform is included.
+    The screenshot compared current week to 8/2–8/8 (a one-week gap). Databox
+    Previous period uses the immediately prior 7 days unless you set a custom range.
+  </p>
+</body>
+</html>

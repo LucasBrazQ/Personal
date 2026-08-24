@@ -1,0 +1,68 @@
+{
+  "client_name": "Pilates Anytime",
+  "week_starts_on": "sunday",
+  "timezone": "America/Los_Angeles",
+  "rows": [
+    {
+      "platform": "Google Search Ads (Non-Brand)",
+      "sort_order": 1,
+      "source": "google_ads",
+      "notes": "Filter Google Ads campaigns to Search, excluding brand keywords/campaigns."
+    },
+    {
+      "platform": "Meta Ads",
+      "sort_order": 2,
+      "source": "meta",
+      "notes": "All Meta campaigns. Acquisitions mapped to Complete Registration until the client confirms the conversion used in the spreadsheet."
+    },
+    {
+      "platform": "Microsoft Search Ads (Branded)",
+      "sort_order": 3,
+      "source": "microsoft_ads",
+      "notes": "Microsoft Advertising Search, branded campaigns only."
+    },
+    {
+      "platform": "Google Search Ads (Brand)",
+      "sort_order": 4,
+      "source": "google_ads",
+      "notes": "Filter Google Ads campaigns to Search brand campaigns."
+    },
+    {
+      "platform": "Apple Ads",
+      "sort_order": 5,
+      "source": "apple_search_ads",
+      "notes": "No native Databox connector. Push via this dataset or Google Sheets."
+    }
+  ],
+  "metrics": {
+    "acquisitions": {
+      "aggregation": "SUM",
+      "format": "number",
+      "favorable_trend": "up"
+    },
+    "spend": {
+      "aggregation": "SUM",
+      "format": "currency_usd",
+      "favorable_trend": "down"
+    },
+    "cpa": {
+      "formula": "spend / acquisitions",
+      "format": "currency_usd",
+      "favorable_trend": "down",
+      "highlight": "green"
+    }
+  },
+  "date_ranges": {
+    "current_week_example": {
+      "start": "2026-08-16",
+      "end": "2026-08-22",
+      "label": "Current Week (Sun–Sat)"
+    },
+    "prior_week_in_spreadsheet": {
+      "start": "2026-08-02",
+      "end": "2026-08-08",
+      "label": "The screenshot compared to 8/2–8/8 (two weeks prior), not the immediately previous week."
+    },
+    "recommended_wow": "previous_period"
+  }
+}

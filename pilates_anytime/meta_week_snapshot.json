@@ -1,0 +1,38 @@
+{
+  "workspace": "Pilates Anytime",
+  "platform": "Meta Ads",
+  "snapshot_generated_at": "2026-08-24T17:31:37.640Z",
+  "acquisition_event": "Complete Registration",
+  "periods": [
+    {
+      "label": "current_week",
+      "start": "2026-08-16",
+      "end": "2026-08-22",
+      "acquisitions": 169,
+      "spend": 15996.54,
+      "cpa": 94.65,
+      "campaigns": [
+        {"name": "Evergreen - Advantage +", "spend": 11695.87, "acquisitions": 121},
+        {"name": "Challenges Campaign", "spend": 2630.49, "acquisitions": 30},
+        {"name": "Challenges Attribution Test", "spend": 1110.33, "acquisitions": 7},
+        {"name": "Remarketing Campaign", "spend": 559.85, "acquisitions": 11}
+      ]
+    },
+    {
+      "label": "spreadsheet_prior_week",
+      "start": "2026-08-02",
+      "end": "2026-08-08",
+      "acquisitions": 141,
+      "spend": 14134.91,
+      "cpa": 100.25,
+      "campaigns": [
+        {"name": "Evergreen - Advantage +", "spend": 10406.3, "acquisitions": 106},
+        {"name": "Challenges Campaign", "spend": 3728.61, "acquisitions": 35}
+      ]
+    }
+  ],
+  "notes": [
+    "Meta purchases for the current week were 16 — far below the spreadsheet's blended 482 acquisitions, so the sheet is not using Purchases.",
+    "Complete Registration (169 current / 141 prior) is the closest Meta conversion to an 'acquisition' count. Confirm with the client before locking the mapping."
+  ]
+}
