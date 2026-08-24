@@ -92,7 +92,11 @@ Set the Databoard week start to **Sunday** (account timezone
 ## B. Build the Databoard
 
 1. New Databoard, e.g. **Pilates Anytime — Weekly paid media**.
-2. Optional: Image datablock with the Pilates Anytime logo, top left.
+2. Optional: Image datablock with the co-branded header logo, top left.
+   Upload `pilates_anytime/assets/matchnode-pilates-anytime-combined.png`
+   (Matchnode mark + divider + Pilates Anytime wordmark on black). To regenerate
+   after swapping either source logo, run
+   `python scripts/create_combined_logo.py`.
 3. Add a **Table** datablock, full width.
 
 ### Table settings
