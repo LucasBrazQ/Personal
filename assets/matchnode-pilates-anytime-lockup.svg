@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1400"
+     height="360"
+     viewBox="0 0 1400 360"
+     role="img"
+     aria-labelledby="title description">
+  <title id="title">Matchnode and Pilates Anytime logo lockup</title>
+  <desc id="description">The Matchnode symbol, a vertical divider, and the Pilates Anytime logo.</desc>
+
+  <!-- Crop the symbol from Matchnode's official horizontal SVG. -->
+  <svg x="20" y="35" width="320" height="290" viewBox="0 0 47.34 38.6" preserveAspectRatio="xMidYMid meet">
+    <image width="176" height="39" xlink:href="matchnode-site-logo.svg"/>
+  </svg>
+
+  <rect x="385" y="20" width="6" height="320" fill="#78909c"/>
+
+  <image x="455"
+         y="92"
+         width="900"
+         height="176"
+         preserveAspectRatio="xMidYMid meet"
+         xlink:href="pilates-anytime-logo.svg"/>
+</svg>
