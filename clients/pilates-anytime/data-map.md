@@ -222,7 +222,7 @@ Neither of those is the **website** first invoice after a 15-day web trial. That
 |---------------|---------------------------|------------------|--------|
 | Account Registration | **Lead** (new) | GTM — same trigger as Meta Lead | Matchnode (we have GTM) |
 | Complete Checkout | **Signup (Trial Started)** | Already live on website | Already exists; keep Count = One |
-| First paid charge after trial | **Purchase** (first invoice only) | Segment → Google Ads / Enhanced Conversions | **Adam / Segment.** Create only if app In-app purchase ≠ first paid. Marina’s default: **create it**. |
+| First paid charge after trial | **Purchase** (first invoice only) | Segment → Google Ads / Enhanced Conversions | **Adam / Segment.** Marina: create this, especially for web. Skip a duplicate *app* Purchase in Segment only if Adam confirms Firebase IAP is already first-paid-only. |
 | Trial cancel | **TrialCanceled** | Segment | Adam / Segment |
 | Paid cancel | **SubscriptionCanceled** | Segment | Adam / Segment |
 
