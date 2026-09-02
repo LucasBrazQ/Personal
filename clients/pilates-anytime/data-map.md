@@ -214,7 +214,7 @@ Firebase’s own event split (for context, not a substitute for Adam):
 - `in_app_purchase` — user completes an in-app purchase, including an **initial** subscription. Renewals are usually a different event (`app_store_subscription_renew`), but implementations vary (especially iOS StoreKit 2). Count = Every in Google Ads still means every qualifying IAP is a conversion, not “one per user.”
 - `app_store_subscription_convert` — **free trial converts to paid**. This is the event that *should* match Meta Purchase for **app-store** trials. It is present for Android; it is **not** in the screenshot for iOS.
 
-Neither of those is the **website** first invoice after a 15-day web trial. That signal has to come from Segment (same as Meta Purchase).
+Neither of those is the **website first purchase** after a 15-day web trial. That signal has to come from Segment (same as Meta Purchase).
 
 ### Google event plan (website)
 
@@ -222,7 +222,7 @@ Neither of those is the **website** first invoice after a 15-day web trial. That
 |---------------|---------------------------|------------------|--------|
 | Account Registration | **Lead** (new) | GTM — same trigger as Meta Lead | Matchnode (we have GTM) |
 | Complete Checkout | **Signup (Trial Started)** | Already live on website | Already exists; keep Count = One |
-| First paid charge after trial | **Purchase** (first invoice only) | Segment → Google Ads / Enhanced Conversions | **Adam / Segment.** Marina: create this, especially for web. Skip a duplicate *app* Purchase in Segment only if Adam confirms Firebase IAP is already first-paid-only. |
+| First paid charge after trial | **Purchase** (first purchase only) | Segment → Google Ads / Enhanced Conversions | **Adam / Segment.** Marina: create this, especially for web. Skip a duplicate *app* Purchase in Segment only if Adam confirms Firebase IAP is already first-purchase only. |
 | Trial cancel | **TrialCanceled** | Segment | Adam / Segment |
 | Paid cancel | **SubscriptionCanceled** | Segment | Adam / Segment |
 
