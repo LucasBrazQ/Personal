@@ -149,7 +149,7 @@
 <body>
   <header>
     <h1>Pilates Anytime — Data Map</h1>
-    <p>Paid Meta journey from ad click through trial, first payment, and cancellation. Solid boxes are user steps. Dashed ovals are Meta events.</p>
+    <p>Meta + Google. Solid boxes are user steps. Meta events in blue. Google website: Lead is new (GTM); Signup (Trial Started) already exists. Firebase In-app purchase is not confirmed as first-paid-only — ask Adam.</p>
   </header>
 
   <div class="flow">
@@ -214,6 +214,7 @@
         <th>User action</th>
         <th>Fires when</th>
         <th>Meta event</th>
+        <th>Google Ads</th>
         <th>Do not fire on</th>
       </tr>
     </thead>
@@ -223,6 +224,7 @@
         <td>Clicks a Meta ad</td>
         <td>Ad click (store click IDs)</td>
         <td>None</td>
+        <td>None (persist gclid)</td>
         <td>—</td>
       </tr>
       <tr>
@@ -230,12 +232,14 @@
         <td>Lands on /px/* page</td>
         <td>Page view</td>
         <td>None (optional ViewContent)</td>
+        <td>None</td>
         <td>—</td>
       </tr>
       <tr>
         <td>3. CTA Click</td>
         <td>Clicks “Start Free Trial”</td>
         <td>Redirect to registration</td>
+        <td>None</td>
         <td>None</td>
         <td>Do not send Lead</td>
       </tr>
@@ -244,12 +248,14 @@
         <td>Submits name, email, password</td>
         <td>Account created successfully</td>
         <td class="meta">Lead</td>
+        <td class="meta">Lead (create in GTM)</td>
         <td>CTA click, existing login</td>
       </tr>
       <tr>
         <td>5. Plan + Payment</td>
         <td>Chooses plan and payment method</td>
         <td>Form progress</td>
+        <td>None required</td>
         <td>None required</td>
         <td>Do not send CompleteRegistration yet</td>
       </tr>
@@ -258,12 +264,14 @@
         <td>Clicks Complete Checkout</td>
         <td>Trial started, card stored, $0</td>
         <td class="meta">CompleteRegistration</td>
+        <td class="meta">Signup (Trial Started) — already live</td>
         <td>Form-only submit; first paid invoice</td>
       </tr>
       <tr>
         <td>7. Trial Active</td>
         <td>Uses membership</td>
         <td>Access window</td>
+        <td>None</td>
         <td>None</td>
         <td>—</td>
       </tr>
@@ -272,6 +280,7 @@
         <td>No click required</td>
         <td>First successful invoice after trial</td>
         <td class="meta">Purchase</td>
+        <td>Create in Segment unless Adam confirms IAP = first paid only (web still needs Segment)</td>
         <td>Checkout button; renewals; failed charges</td>
       </tr>
       <tr>
@@ -279,6 +288,7 @@
         <td>Cancels during trial</td>
         <td>Cancel confirmed, still unpaid</td>
         <td class="meta">TrialCanceled</td>
+        <td>Segment (ask Adam)</td>
         <td>Paid-subscriber cancel</td>
       </tr>
       <tr>
@@ -286,12 +296,13 @@
         <td>Cancels after paying</td>
         <td>Paid subscription cancelled</td>
         <td class="meta">SubscriptionCanceled</td>
+        <td>Segment (ask Adam)</td>
         <td>Trial-only cancel</td>
       </tr>
     </tbody>
   </table>
   <footer>
-    Matchnode · Pilates Anytime data map · Lead, CompleteRegistration, Purchase, TrialCanceled, SubscriptionCanceled
+    Matchnode · Pilates Anytime · Meta Lead / CompleteRegistration / Purchase / cancels · Google Lead (GTM) · Signup (Trial Started) · Firebase IAP pending Adam · Segment Purchase + cancels
   </footer>
 </body>
 </html>
