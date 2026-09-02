@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pilates Anytime — Data Map</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --muted: #5c5c5c;
+      --line: #2b2b2b;
+      --ads: #111;
+      --lp: #6b1d2a;
+      --beige: #e8d9c4;
+      --event: #2f6fed;
+      --purchase: #1f7a4d;
+      --cancel: #8a3a12;
+      --paper: #f6f3ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    header {
+      padding: 28px 40px 8px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.02em;
+    }
+    header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .flow {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      padding: 24px 32px 8px;
+      overflow-x: auto;
+    }
+    .col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 150px;
+    }
+    .box {
+      width: 140px;
+      min-height: 72px;
+      padding: 14px 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+    }
+    .ads { background: var(--ads); color: #fff; }
+    .lp { background: var(--lp); color: #fff; }
+    .step { background: var(--beige); color: var(--ink); }
+    .arrow {
+      align-self: flex-start;
+      margin-top: 28px;
+      width: 72px;
+      position: relative;
+      height: 18px;
+    }
+    .arrow::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 10px;
+      height: 2px;
+      background: var(--line);
+    }
+    .arrow::after {
+      content: "";
+      position: absolute;
+      right: 4px;
+      top: 2px;
+      border: 8px solid transparent;
+      border-left-color: var(--line);
+      border-right: 0;
+    }
+    .label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      text-align: center;
+      max-width: 140px;
+    }
+    .event {
+      margin-top: 28px;
+      border: 2px dashed var(--event);
+      color: var(--event);
+      border-radius: 40px;
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      width: 148px;
+    }
+    .event.purchase { border-color: var(--purchase); color: var(--purchase); }
+    .event.cancel { border-color: var(--cancel); color: var(--cancel); }
+    .stem {
+      width: 0;
+      height: 24px;
+      border-left: 2px dashed var(--event);
+      margin-top: 4px;
+    }
+    .stem.purchase { border-left-color: var(--purchase); }
+    .stem.cancel { border-left-color: var(--cancel); }
+    .none {
+      margin-top: 56px;
+      font-size: 11px;
+      color: #999;
+    }
+    table {
+      width: calc(100% - 80px);
+      margin: 28px 40px 48px;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: #f0eee9; }
+    .meta { font-weight: 700; }
+    footer {
+      padding: 0 40px 40px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Pilates Anytime — Data Map</h1>
+    <p>Paid Meta journey from ad click through trial, first payment, and cancellation. Solid boxes are user steps. Dashed ovals are Meta events.</p>
+  </header>
+
+  <div class="flow">
+    <div class="col">
+      <div class="box ads">Ads</div>
+      <div class="label">Meta click · persist fbclid</div>
+      <div class="none">No conversion event</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="col">
+      <div class="box lp">Landing Page</div>
+      <div class="label">/px/* campaign pages</div>
+      <div class="none">No conversion event</div>
+    </div>
+    <div class="arrow" title="CTA Click"></div>
+    <div class="col">
+      <div class="box step">Account Registration</div>
+      <div class="label">CTA: Start Free Trial → name, email, password</div>
+      <div class="stem"></div>
+      <div class="event">Meta “Lead”</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="col">
+      <div class="box step">Plan + Payment</div>
+      <div class="label">Select plan · add payment method</div>
+      <div class="none">No required event</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="col">
+      <div class="box step">Complete Checkout</div>
+      <div class="label">Start 15-day free trial</div>
+      <div class="stem"></div>
+      <div class="event">Meta “Complete Registration”</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="col">
+      <div class="box step">Trial Active</div>
+      <div class="label">15 days · $0 charged</div>
+      <div class="stem cancel"></div>
+      <div class="event cancel">Meta “TrialCanceled”</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="col">
+      <div class="box step">First Paid Charge</div>
+      <div class="label">Trial ends · first invoice succeeds</div>
+      <div class="stem purchase"></div>
+      <div class="event purchase">Meta “Purchase”</div>
+    </div>
+    <div class="arrow"></div>
+    <div class="col">
+      <div class="box step">Cancel (paid)</div>
+      <div class="label">My Account → Cancel Subscription</div>
+      <div class="stem cancel"></div>
+      <div class="event cancel">Meta “SubscriptionCanceled”</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Step</th>
+        <th>User action</th>
+        <th>Fires when</th>
+        <th>Meta event</th>
+        <th>Do not fire on</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1. Ads</td>
+        <td>Clicks a Meta ad</td>
+        <td>Ad click (store click IDs)</td>
+        <td>None</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>2. Landing Page</td>
+        <td>Lands on /px/* page</td>
+        <td>Page view</td>
+        <td>None (optional ViewContent)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>3. CTA Click</td>
+        <td>Clicks “Start Free Trial”</td>
+        <td>Redirect to registration</td>
+        <td>None</td>
+        <td>Do not send Lead</td>
+      </tr>
+      <tr>
+        <td>4. Account Registration</td>
+        <td>Submits name, email, password</td>
+        <td>Account created successfully</td>
+        <td class="meta">Lead</td>
+        <td>CTA click, existing login</td>
+      </tr>
+      <tr>
+        <td>5. Plan + Payment</td>
+        <td>Chooses plan and payment method</td>
+        <td>Form progress</td>
+        <td>None required</td>
+        <td>Do not send CompleteRegistration yet</td>
+      </tr>
+      <tr>
+        <td>6. Complete Checkout</td>
+        <td>Clicks Complete Checkout</td>
+        <td>Trial started, card stored, $0</td>
+        <td class="meta">CompleteRegistration</td>
+        <td>Form-only submit; first paid invoice</td>
+      </tr>
+      <tr>
+        <td>7. Trial Active</td>
+        <td>Uses membership</td>
+        <td>Access window</td>
+        <td>None</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>8. First paid charge</td>
+        <td>No click required</td>
+        <td>First successful invoice after trial</td>
+        <td class="meta">Purchase</td>
+        <td>Checkout button; renewals; failed charges</td>
+      </tr>
+      <tr>
+        <td>9a. Trial cancel</td>
+        <td>Cancels during trial</td>
+        <td>Cancel confirmed, still unpaid</td>
+        <td class="meta">TrialCanceled</td>
+        <td>Paid-subscriber cancel</td>
+      </tr>
+      <tr>
+        <td>9b. Subscription cancel</td>
+        <td>Cancels after paying</td>
+        <td>Paid subscription cancelled</td>
+        <td class="meta">SubscriptionCanceled</td>
+        <td>Trial-only cancel</td>
+      </tr>
+    </tbody>
+  </table>
+  <footer>
+    Matchnode · Pilates Anytime data map · Lead, CompleteRegistration, Purchase, TrialCanceled, SubscriptionCanceled
+  </footer>
+</body>
+</html>
