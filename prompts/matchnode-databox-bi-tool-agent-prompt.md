@@ -47,6 +47,8 @@ These rules come from internal Super App practice. Follow them even if they conf
 11. **Treat this prompt as product requirements, not as evidence about the codebase.** If any named route, service, library, table, or job pattern differs in the repository, use the repository's real convention and document the deviation.
 12. **Do not silently reduce scope.** Maintain a capability matrix with statuses `not started`, `foundation`, `usable`, and `production-ready`. If a requested capability cannot be completed, leave an explicit tracked follow-up with the missing backend/UI/test work; never present a placeholder as done.
 
+In the matrix, `usable` means demoable on authorized real data with documented limitations. `production-ready` means the phase's exit tests pass, it has runbooks and observability, it is feature-flagged for at least one pilot client, and it has no known critical tenancy, correctness, or freshness defects. “Replacement” means Phase 6 readiness for the Matchnode workflows listed here, not feature-count parity with every vendor feature.
+
 ## Why this exists (Matchnode today)
 
 Matchnode currently uses Databox as the agency BI layer:
@@ -168,7 +170,11 @@ type BIQuery = {
   workspaceId: string
   clientIds: string[]
   accountIds: string[]
+  reportId: string
+  componentId: string
   datasetId?: string
+  blendId?: string
+  extractId?: string
   metricIds: string[]
   dimensions: string[]
   filters: FilterExpression
@@ -179,10 +185,13 @@ type BIQuery = {
   granularity?: 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
   sort?: SortSpec[]
   limit?: number
+  credentialMode: 'workspace' | 'viewer' | 'share_token'
+  shareTokenId?: string
+  asOf?: string
 }
 ```
 
-The response must contain typed columns/rows or series plus totals, comparison values/deltas, executed timezone/range, warnings, truncation/partial flags, lineage, cache status, and freshness for every contributing source. Batch independent block queries to prevent serial waterfalls.
+The response must contain typed columns/rows or series plus totals, comparison values/deltas, executed timezone/range, warnings, truncation/partial flags, lineage, cache status, and freshness for every contributing source. Batch independent block queries to prevent serial waterfalls. The planner derives authorization from the server session/share token, verifies every supplied scope identifier, and rejects an implicit blend, extract, tenant, or credential mode.
 
 Define stable metric semantics. For ratios, explicitly distinguish `SUM(numerator) / SUM(denominator)` from `SUM(row_ratio)` and `AVG(row_ratio)`. Prevent double aggregation of provider-preaggregated metrics such as reach, frequency, and impression share.
 
@@ -197,11 +206,10 @@ Left-nav (or Super App equivalent) for this module:
 | **Designer** | Full-screen drag-and-drop editor for report pages, charts, controls, text, images, and shapes |
 | **Viewer** | Interactive report with pages, controls, drill/cross-filtering, and master date range |
 | **Metrics** | Library of source metrics + custom + calculated; favorite; set goal; set alert |
-| **Data / Models** | Connections, reusable data sources, datasets, fields, extracts, relationships/blends, parameters, freshness |
+| **Data** | Tabs for Connections, Sources & fields, Extracts, Relationships/blends, parameters, freshness |
 | **Scorecards** | Up to 15 metrics; daily/weekly/monthly delivery |
 | **Goals** | Targets on any metric; traffic-light pacing (green ≥100%, amber 75–99%, red <75%) |
 | **Alerts** | Threshold / % change / missing data; in-app + email/Slack/Google Chat if Super App already has a notifier |
-| **Data sources** | Connect, status, last sync, reconnect, account mapping to Super App clients |
 | **Templates** | Account templates (Matchnode standard client board, spend-only board, KPI board) |
 | **Deliveries / Sharing** | Access, public link, embed, download, scheduled snapshots/PDFs, email/chat delivery history |
 | **Admin / Health** | Connector health, job failures, freshness SLA, usage/query costs, audit log, feature limits |
@@ -254,7 +262,7 @@ The Designer is the core of the product. Ship it as a real editor, not a static 
 - Metrics/measures, dimensions, optional breakdown dimension, aggregation, sort, row limit
 - Primary date range
 - Compare with: previous period, previous year, custom range, goal (multiple comparisons where the viz allows)
-- Filters using nested AND/OR groups and operators appropriate to type: equals, in, contains, regex if safely supported, numeric/date ranges, null/empty
+- Filters using nested AND/OR groups and operators appropriate to type: equals, in, contains, starts with, numeric/date ranges, null/empty. Do not expose arbitrary regular expressions in v1.
 - Dimensions / breakdown (cap 15 selected values, matching Databox)
 - Number format, currency, timezone
 - Show total, trend line, average line
@@ -279,13 +287,13 @@ The Designer is the core of the product. Ship it as a real editor, not a static 
 
 **Block actions:** move, resize, duplicate (same board or another board), delete (confirm).
 
-Each block is independent (own source, metric, range) except when the viewer master date range is applied.
+By default, each block owns its source, metric, range, and filters. Effective restrictions apply in this order: authorization/RLS → report controls → page controls → group controls → cross-filter selection → block filters → master viewer date range. A block may explicitly ignore the master date range only when its configuration schema permits it; it can never ignore authorization.
 
 ## Visualization and component system
 
 Implement a typed visualization registry rather than one-off chart conditionals. Each visualization declares compatible field roles, minimum/maximum fields, supported interactions, configuration schema, renderer, empty/error behavior, export behavior, and accessibility fallback.
 
-Required types:
+The following are required for full replacement. Phase 2 implements its named MVP subset; remaining registry entries stay accurately marked `not started` or `foundation` until Phases 4–5:
 
 - **KPI:** number/scorecard with comparison and sparkline, progress, radial progress, bullet, gauge
 - **Time/category:** line, area, stacked area, vertical/horizontal bar, grouped/stacked/100% stacked bar, combo
@@ -339,13 +347,14 @@ After priority sources work end-to-end, use the same connector contract for BigQ
 - Calculated metrics may combine governed metrics and constants across sources only when grain, join/alignment key, account scope, currency, and timezone are compatible.
 - Prevent recursion and ambiguous nested aggregation. Store an AST or equivalent safe expression model; never evaluate arbitrary JavaScript/SQL from the browser.
 - Timezone is mandatory for cross-source date alignment. Currency conversion requires an explicit rate source and effective date; never add mixed currencies silently.
-- Preview sample results and SQL/query plan where safe for internal admins, with estimated scan/cost for metered warehouses.
+- Preview sample results for authorized editors. Raw SQL/query-plan preview is restricted to internal users with the discovered BI administration permission, runs under the same RLS, and redacts identifiers outside their tenant; never expose it in public or ordinary viewer surfaces.
 
 **Data manipulation and modeling:**
 
 - Rename/alias, hide, cast type, replace/null handling, groups, bins, sort keys, date grain, and custom fiscal periods without changing source data.
 - Dataset builder for selecting columns, filtering rows, deriving fields, and scheduling an extract/materialization.
 - Explicit relationships and blends with join type, ordered inputs, join keys, cardinality (`1:1`, `1:N`, `N:1`, `N:N` warning), pre-aggregation behavior, and preview.
+- Every blend input declares its grain key set. Pre-aggregate each input to its selected dimensions before joining. Block save when grain keys are missing or fan-out makes the metric unsafe; only re-aggregate post-join values whose semantics allow it.
 - Support at least left and inner joins initially; add full/right only if the execution engine can preserve understandable semantics.
 - A blend may combine up to a documented safe number of inputs. Do not copy Looker Studio's five-table limit blindly.
 - Detect fan-out/double-count risks and incompatible grains before save. Display lineage and source freshness for every input.
@@ -390,6 +399,7 @@ Encrypt credentials using the existing secret mechanism/KMS. Redact tokens and s
 
 - Meta Ads, Google Ads, and Sheets/Drive must have real end-to-end paths, not fixtures.
 - Multiple accounts per client and account-level timezone/currency differences must be tested.
+- Single-source queries default to the platform/account timezone. Cross-source metrics and master report ranges use the explicit metric/report timezone, defaulting to the client's configured timezone and then `America/Chicago`.
 - Ads connectors are read-only and request the least scopes possible.
 - Historical backfill and incremental correction must handle provider attribution changes.
 - Sheets supports header selection, type inference with overrides, named ranges/tabs, schema drift, blank/error cells, and a required date field for time-series metrics.
@@ -405,11 +415,13 @@ Encrypt credentials using the existing secret mechanism/KMS. Redact tokens and s
 - Schedule: daily/weekly/monthly, time of day (huddles need **before** huddle).
 - Delivery: in-app + email; Slack/Google Chat if a notifier already exists.
 - Agency template: “all spend metrics for clients assigned to this teammate.” Client assignment must come from Super App teammate/client mapping (`dashboard.matchnode.com` teammate outline), not a hardcoded sheet.
+- Scorecards and metric alerts target authenticated Super App users. Scheduled snapshots/PDFs may target external recipients only through the existing approved recipient/domain policy or an explicit per-delivery approval; audit recipient and outcome.
 
 **Goals**
 
 - Attach a numeric goal to any metric for a period (day/week/month/quarter/custom).
 - Used by gauges, progress, comparisons, and scorecards.
+- Define pacing as `actual / (goal * elapsed_fraction_of_period)` in the metric timezone, with completed periods using an elapsed fraction of `1`. Calendar periods use inclusive boundaries; weeks start Monday and the calendar year is the default fiscal calendar unless the client has an explicit override.
 
 **Alerts**
 
@@ -429,12 +441,14 @@ Encrypt credentials using the existing secret mechanism/KMS. Redact tokens and s
 **Sharing**
 
 - Public viewer URL analogous to Databox datawalls (stable token, no login).
-- Optional password and expiry.
+- Optional password, expiry, IP allowlist, revoke, and regenerate.
+- Public links expose the published revision only. Date/filter interaction, CSV/underlying-data download, and copying default to disabled and must be individually enabled.
 - Logged-in sharing by user/team/role with viewer/editor/publisher ownership.
 - Embed snippet with fixed/responsive sizing, allowed-origin policy, and interactive/read-only options.
 - Owner/service credential behavior must be explicit: a viewer may only see source data through the report's authorized query envelope.
 - Publish workflow separates autosaved draft from public/client-visible revision. Preview “as viewer” and “as public.”
 - Copy/duplicate can be allowed independently from view, export, and underlying-data download.
+- Share-token mode may run only server-built, allowlisted queries fixed to that published revision's client/accounts/metrics/fields and enabled control schema. It cannot submit arbitrary dimensions or filters. Sensitive-classified fields cannot be published.
 - Respect client confidentiality: public links are created explicitly; default boards are private to Matchnode.
 
 ## Data platform (backend)
@@ -504,6 +518,8 @@ These replace the Guru “new client Databox” ritual.
 3. **Agency main KPI board** — one block per client for the contracted KPI (replaces adding KPI to the shared datawall `fbca9314…`).
 4. **AM huddle scorecard** — yesterday spend % change for all of *my* clients.
 
+Resolve the “primary conversion/contracted KPI” from the same Super App client configuration used by `/analytics`; Phase 0 must name the actual table/API and field. If no KPI exists, template creation opens an explicit mapping step and cannot invent a conversion action. Likewise, Phase 0 must name the real user-to-client assignment source. Until that mapping exists, huddle scorecards use an explicit authorized client picker and the capability matrix marks automatic assignment incomplete.
+
 Creating a new client in Super App onboarding should be able to **clone template 1**, attach that client’s sources, and produce a public viewer URL that can be pasted into the weekly-doc template. Hook this into existing onboarding (`/client/onboarding`) if the change is small; otherwise document the API/function the onboarding flow should call.
 
 ## UX standards (Super App, not Databox skin)
@@ -526,7 +542,7 @@ Produce the required discovery artifact, capability matrix, data-flow diagrams, 
 Migrations and typed models for connections, accounts, data sources, fields, governed metrics, reports/pages/components, goals, permissions, and jobs. Authorized query API and connector contract. Real Meta + Google Ads + Sheets paths, freshness/health, metric library, tests and instrumentation.
 
 **Phase 2 — Usable Designer and Viewer**
-Responsive grid, report pages, autosave/conflict handling, number/line/bar/pie/table/funnel/progress/gauge/notes, date and dropdown controls, viewer, templates 1–3, batching, loading/error/empty states, accessibility, draft/publish.
+Responsive grid, report pages, autosave/conflict handling, number/line/bar/pie/table/funnel/progress/gauge/notes, date and dropdown controls, viewer, templates 1–3, batching, loading/error/empty states, accessibility, draft/publish. Phase 2 templates may use provider-native CPA or a versioned server-defined ratio metric; cross-source blended totals and the no-code formula UI remain Phase 4 requirements and must not be faked.
 
 **Phase 3 — Sharing and operations**
 Role-based sharing, public links, embed security, snapshot JPG/PDF, Monday 8am schedules, exports, scorecards, huddle template, alerts for spend/conversions, audit and admin health. Migrate selected Databox destinations behind a feature flag.
@@ -551,7 +567,17 @@ For every phase:
 5. perform browser verification using real authorized data
 6. update the capability matrix and list evidence, limitations, and next phase
 
-## Acceptance criteria (definition of done)
+### Phase exit gates
+
+- **Phase 0:** the discovery artifact identifies real repository paths/services, resolves client KPI and user-client assignment sources, records open decisions, and proves one authorized real-data query.
+- **Phase 1:** Meta, Google Ads, and Sheets connector/query contract tests pass; multi-account isolation, timezone, freshness, retry/idempotency, and cache authorization are tested.
+- **Phase 2:** an authorized user creates a real-data report from a template, edits/reloads/publishes it, uses master date and dropdown controls, and views the published revision; no blend/parameter claims are required.
+- **Phase 3:** role share, public open/revoke, restricted public query envelope, PDF/JPG, one successful and one failed/retried schedule, scorecard, alert, and audit trail are demonstrated. Pilot migration covers Daily Spend/Daily Conversion destinations and Monday snapshot recipients discovered in Phase 0.
+- **Phase 4:** the safe formula engine, cross-source CPA, parameter/control scoping, explicit two-source blend with grain/fan-out validation, drill/cross-filter, extracts, and impact/version behavior pass tests.
+- **Phase 5:** every newly claimed connector/visualization has contract/accessibility/export tests and production-like data evidence; optional mobile stack ordering is implemented or documented as a limitation.
+- **Phase 6:** representative vendor reports reconcile, cached 20-block viewer meets the instrumented performance target, critical accessibility/security/load tests pass, runbooks and migration evidence exist, and remaining human product/security approval is clearly recorded. The agent must not self-declare vendor retirement.
+
+## Full product acceptance criteria (after Phase 6)
 
 A Matchnode technical lead can:
 
@@ -582,9 +608,9 @@ Engineering bar:
 - Contract tests for each connector, query response, visualization configuration, and versioned board JSON.
 - Integration tests for auth/RLS, multi-account and cross-client isolation, sync retry/idempotency, cache scoping/invalidation, extracts, blends, public tokens, schedules, and exports.
 - End-to-end tests for connect/map → metric → report → edit → publish → view → filter → share/revoke → schedule.
-- Golden-data reconciliation for provider API totals and representative Databox/Looker Studio reports, with documented attribution/timezone differences.
+- Golden-data reconciliation for spend, clicks, and impressions against provider totals for identical account/date/timezone inputs; conversions require documented attribution-window differences.
 - Security tests for IDOR, public token enumeration, permission downgrade, XSS, injection, SSRF, CSV injection, allowed embed origins, and secret redaction.
-- Accessibility checks for keyboard Designer paths, focus, labels, contrast, chart summaries, reduced motion, and zoom.
+- Accessibility checks for keyboard add/select/configure/delete paths, focus, labels, contrast, chart summaries, reduced motion, and zoom; automated scans have zero critical violations on Designer and Viewer.
 - Load tests for a representative 20-block report, agency-wide scorecard, concurrent public viewers, sync queue, and scheduled render burst.
 - No campaign mutations.
 - No secrets in client bundles.
@@ -605,7 +631,7 @@ Do not finish with only code. Deliver:
 - user help for creating a source, metric, report, control, blend, goal, alert, scorecard, share, and schedule
 - migration checklist for each Databox/Looker Studio workflow and client
 - test evidence and known limitations
-- screenshots or short walkthrough of the tested vertical flows if the environment supports artifacts
+- redacted screenshots or a short walkthrough of tested vertical flows if the environment supports artifacts; use a designated non-production client or obscure production values and identifiers
 - sample templates containing no credentials, private account identifiers, or client data
 
 ## Constraints
@@ -616,10 +642,10 @@ Do not finish with only code. Deliver:
 - Do not stop at a single hardcoded dashboard per client.
 - Do not expose other clients’ data in public links or in the wrong client context.
 - Do not change production campaigns, budgets, or ads.
-- Ask before adding paid third-party dashboard SDKs.
+- Do not add paid third-party dashboard SDKs. If discovery concludes one is required, record the blocked decision and alternatives in the architecture artifact; continue with approved existing-stack work.
 - Do not expose arbitrary SQL to normal users. If an internal-admin SQL mode is later justified, isolate and sandbox it with read-only credentials, limits, audit, and explicit approval.
 - Do not treat a frontend-only filter as authorization or row-level security.
-- Do not use production client data in fixtures, screenshots, logs, or tests.
+- Real authorized data may be inspected only in the private verification environment. Never commit production client data, PII, account identifiers, tokens, screenshots, fixtures, logs, or test snapshots to the repository or PR.
 - Do not introduce a new database, queue, cache, auth provider, chart library, or semantic engine until the discovery artifact proves the existing stack cannot satisfy the requirement and records the operational cost.
 
 ## Suggested first message to yourself after the repo is open
