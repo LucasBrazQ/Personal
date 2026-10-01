@@ -17,11 +17,11 @@ Do not make a pixel clone or copy proprietary code, text, trademarks, logos, or 
 
 The result must **look and behave like every other Super App tool**: same shell, auth, client context, navigation, design system, data patterns, deployment model, and collaboration rules.
 
-Expected result: a non-technical account manager or technical lead can connect a client’s paid-media and business data, model fields and metrics, assemble a multi-page interactive report by drag-and-drop, change dates and controls live, safely blend sources, share a public/passworded link, schedule Monday 8am snapshots, and run daily huddle scorecards — without leaving `dashboard.matchnode.com`.
+Expected result: a non-technical account manager or technical lead can connect a client’s paid-media and business data, model fields and metrics, assemble a multi-page interactive report, click any chart or table and drag it into place, resize it, restyle its colors and fonts, change dates and controls live, safely blend sources, share a public/passworded link, schedule Monday 8am snapshots, and run daily huddle scorecards — without leaving `dashboard.matchnode.com`.
 
 Use the existing Super App naming convention. If none exists, call the product **Matchnode BI** and call its dashboard objects **Databoards**. Matchnode branding only.
 
-This is a large product, not a credible one-commit task. Work autonomously through the phases below, keeping every phase deployable and demoable. Do not claim full parity when only mock screens or fixtures exist.
+**Build the whole product in one implementation.** Do not split delivery into phases, an MVP, or a follow-up project. Do not stop after discovery, connectors, or a basic dashboard. Every capability in this prompt—including Designer, all listed visualizations, click-and-drag layout, per-chart and per-table styling, metrics, formulas, blends, controls, sharing, scorecards, goals, alerts, snapshots, and the priority connectors—must be implemented and working together before you finish. You may code in a sensible internal order, but the task is incomplete until the full feature is present. Do not claim completion when screens are mocks or numbers are fixtures.
 
 ## How you must work (Super App standards)
 
@@ -45,9 +45,7 @@ These rules come from internal Super App practice. Follow them even if they conf
 9. **Internal-first, client-shareable second.** Default UX is Matchnode teammates. Public/embed links are a sharing mode, not a separate product.
 10. **Verify like a user.** After UI work, exercise create → edit → view → date-range change → share in the browser (or the closest substitute). Check empty, error, loading, no-permission, and disconnected-source states. Check desktop; Designer must remain usable at 1280px+.
 11. **Treat this prompt as product requirements, not as evidence about the codebase.** If any named route, service, library, table, or job pattern differs in the repository, use the repository's real convention and document the deviation.
-12. **Do not silently reduce scope.** Maintain a capability matrix with statuses `not started`, `foundation`, `usable`, and `production-ready`. If a requested capability cannot be completed, leave an explicit tracked follow-up with the missing backend/UI/test work; never present a placeholder as done.
-
-In the matrix, `usable` means demoable on authorized real data with documented limitations. `production-ready` means the phase's exit tests pass, it has runbooks and observability, it is feature-flagged for at least one pilot client, and it has no known critical tenancy, correctness, or freshness defects. “Replacement” means Phase 6 readiness for the Matchnode workflows listed here, not feature-count parity with every vendor feature.
+12. **Do not silently reduce scope.** Maintain a capability matrix while you work. Every required capability must end as `production-ready`. A capability is production-ready only when it works on authorized real data, has tests, and has no known critical tenancy, correctness, freshness, or interaction defect. If something truly cannot be completed, stop and record the exact blocker; do not ship a placeholder and do not leave the rest of the product for a later phase. “Replacement” means the Matchnode workflows in this prompt work in the Super App, not feature-count parity with every vendor feature.
 
 ## Why this exists (Matchnode today)
 
@@ -110,9 +108,9 @@ Inspect the real Super App and commit an architecture decision record or impleme
 - database, migrations, object/file storage, cache, queue, cron, email/chat, PDF/image rendering, observability, feature flags, and secrets patterns
 - deployed topology and local/test setup
 - proposed reuse versus new components, with reasons
-- a capability matrix and phased migration plan from Databox/Looker Studio
+- a capability matrix covering the full product and a migration plan from Databox/Looker Studio
 
-Do not begin broad implementation until this artifact exists. A thin vertical spike using one real source is allowed to validate the design.
+Write this artifact first, then continue in the same implementation until the whole product is built. Do not end the task after the artifact or after a single-source spike.
 
 ## Reference architecture and boundaries
 
@@ -233,10 +231,20 @@ If the Super App already namespaces by client (`/clients/:id/...`), nest under t
 
 The Designer is the core of the product. Ship it as a real editor, not a static dashboard.
 
-**Canvas**
+**Canvas — click, drag, and resize**
 
-- Grid layout; blocks snap, move, resize; neighbors reflow like Databox.
-- Support both **responsive grid** pages and **fixed/freeform** pages for presentation-style reports. Clearly label the mode and preserve layouts across reloads.
+The user must be able to arrange every chart and table by clicking and dragging. This is a required interaction, not a keyboard-only or form-only layout.
+
+- Click a chart, table, or other block once to select it. Show a visible selection outline and resize handles.
+- Drag the selected block by its body or a dedicated move handle and drop it anywhere on the page. The block follows the pointer while dragging.
+- Drag any edge or corner handle to change width and height continuously. Minimum sizes must keep titles and data readable.
+- Drag a chart or table from the library and drop it at the pointer position. It is created there at a sensible default size.
+- Drag multiple selected blocks together. Arrow keys nudge the selection; they do not replace dragging.
+- Support both a snapping grid and free placement. Snapping may assist alignment, but the user can place and size a block exactly where they want. Persist `x`, `y`, `width`, and `height` (or equivalent grid coordinates plus pixel size) for every block.
+- On a responsive page, dragging still changes order, column span, and row span, with a live preview. On a freeform page, dragging changes absolute position and size.
+- Reloading the Designer, opening the Viewer, embedding the report, and exporting PDF/JPG must show the same arrangement.
+- While dragging, do not start a data refresh or lose unsaved style changes. Autosave the new layout when the drag ends.
+- Provide undo immediately after a move or resize.
 - Multi-page reports: add, rename, duplicate, reorder, hide, and delete pages; report-level and page-level components.
 - Auto-save with Saving / Saved status.
 - Undo/redo, copy/paste, multi-select, align/distribute, arrange layers, group/ungroup, lock, keyboard nudge, and duplicate.
@@ -268,7 +276,7 @@ The Designer is the core of the product. Ship it as a real editor, not a static 
 - Show total, trend line, average line
 - Drill-down hierarchy, optional drill-through link, chart interactions/cross-filtering
 - Conditional formatting, reference lines/bands, axis/legend/label/tooltip settings
-- Title, description, font size, accessible label/summary, additional settings
+- Title, description, accessible label/summary, and the full style controls below
 
 **Controls and parameters**
 
@@ -278,10 +286,33 @@ The Designer is the core of the product. Ship it as a real editor, not a static 
 - Parameters are typed, have defaults and validation, can feed formulas and connector queries only through parameterized APIs, and have explicit URL-sharing policy.
 - Cross-filtering is opt-in per chart. Selecting a chart mark filters eligible components in the configured scope; provide a visible clear-filter state.
 
+**Chart and table customization**
+
+Every chart and every table has its own style, saved with the block and inherited from the report theme until the user overrides it. Reset-to-theme must be available per property and for the whole block.
+
+Charts:
+
+- Series, slice, and point colors, including a color picker and reusable palette. Each series can have its own color.
+- Chart background, plot background, border color and width, gridline color, and legend colors.
+- Font family, size, weight, style, and color independently for the title, subtitle, axis titles, axis labels, legend, data labels, and tooltips.
+- Show or hide title, legend, gridlines, axis lines, and data labels. Choose legend position.
+- Axis minimum, maximum, and label rotation. Reference-line color and label font.
+- Conditional color rules for values, such as above goal, below goal, or positive/negative.
+
+Tables and pivot tables:
+
+- Header, body, total-row, and alternate-row background colors, text colors, and border colors.
+- Font family, size, weight, and alignment independently for the title, column headers, body cells, and totals.
+- Per-column number format, alignment, and conditional formatting colors.
+- Drag a column border to resize that column. Drag a column header to reorder columns. Persist widths and order.
+- Row height, cell padding, frozen header, and whether the header stays visible while scrolling.
+
+Style changes apply immediately on the canvas. They survive reload and appear in the viewer, public link, embed, and PDF/JPG export. Use Super App-approved fonts and tokens as defaults; custom colors are allowed inside a block without restyling the rest of the Super App.
+
 **Reusable data and styling**
 
 - A report may use one or more reusable data sources; a component may use one data source or an explicit blend.
-- Report theme controls typography, palette, chart defaults, backgrounds, borders, and spacing using Super App tokens.
+- Report theme controls default typography, palette, chart defaults, backgrounds, borders, and spacing using Super App tokens. A block-level color or font override wins over the theme.
 - Copying a page/component must either preserve valid bindings or open a source-remapping flow.
 - Template creation strips private account identifiers and stores required source/field mappings.
 
@@ -293,7 +324,7 @@ By default, each block owns its source, metric, range, and filters. Effective re
 
 Implement a typed visualization registry rather than one-off chart conditionals. Each visualization declares compatible field roles, minimum/maximum fields, supported interactions, configuration schema, renderer, empty/error behavior, export behavior, and accessibility fallback.
 
-The following are required for full replacement. Phase 2 implements its named MVP subset; remaining registry entries stay accurately marked `not started` or `foundation` until Phases 4–5:
+Implement every visualization below in this same build. Do not leave a type as a later phase:
 
 - **KPI:** number/scorecard with comparison and sparkline, progress, radial progress, bullet, gauge
 - **Time/category:** line, area, stacked area, vertical/horizontal bar, grouped/stacked/100% stacked bar, combo
@@ -307,7 +338,7 @@ The following are required for full replacement. Phase 2 implements its named MV
 
 Charts must have deterministic colors, localized number/date formatting, useful tooltips, legend behavior, no-data and partial-data states, keyboard-readable summaries, and CSV-compatible underlying data where authorized. Large tables require server-side pagination or virtualization.
 
-Optional if time: AI summary block that explains the selected metric(s) for the active range using existing Matchnode AI notes patterns (weekly docs already have `{{overall_ai_performance}}` style summaries). Do not block v1 on LLM quality.
+An AI summary block is optional. If you include it, explain the selected metric(s) for the active range using existing Matchnode AI notes patterns and label it as non-authoritative. Do not delay the rest of the product for it.
 
 Traffic lights for goal-based viz:
 
@@ -518,7 +549,7 @@ These replace the Guru “new client Databox” ritual.
 3. **Agency main KPI board** — one block per client for the contracted KPI (replaces adding KPI to the shared datawall `fbca9314…`).
 4. **AM huddle scorecard** — yesterday spend % change for all of *my* clients.
 
-Resolve the “primary conversion/contracted KPI” from the same Super App client configuration used by `/analytics`; Phase 0 must name the actual table/API and field. If no KPI exists, template creation opens an explicit mapping step and cannot invent a conversion action. Likewise, Phase 0 must name the real user-to-client assignment source. Until that mapping exists, huddle scorecards use an explicit authorized client picker and the capability matrix marks automatic assignment incomplete.
+Resolve the “primary conversion/contracted KPI” from the same Super App client configuration used by `/analytics`. During discovery, name the actual table/API and field. If no KPI exists, template creation opens an explicit mapping step and cannot invent a conversion action. Likewise, name the real user-to-client assignment source during discovery. If that mapping does not exist, implement huddle scorecards with an explicit authorized client picker and record automatic assignment as blocked; still finish every other required capability.
 
 Creating a new client in Super App onboarding should be able to **clone template 1**, attach that client’s sources, and produce a public viewer URL that can be pasted into the weekly-doc template. Hook this into existing onboarding (`/client/onboarding`) if the change is small; otherwise document the API/function the onboarding flow should call.
 
@@ -531,59 +562,32 @@ Creating a new client in Super App onboarding should be able to **clone template
 - Accessibility: keyboard selectable blocks, don’t rely on drag-only (click-to-add from library).
 - Performance: a 20-block board must load without serial waterfalls; batch metric queries.
 
-## Implementation order (do not skip to polish)
+## Build the whole feature at once
 
-Ship in this order so Matchnode can abandon Databox for paid media first.
+Implement the complete BI product in this prompt in one continuous implementation. Discovery is only the first step inside that same effort, not a stopping point.
 
-**Phase 0 — Discovery and architecture**
-Produce the required discovery artifact, capability matrix, data-flow diagrams, schema/query contracts, role matrix, connector reuse map, security risks, and migration plan. Validate one thin real-data query.
+Before writing product code, produce the discovery artifact, capability matrix, data-flow diagrams, schema/query contracts, role matrix, connector reuse map, security risks, and migration plan, and validate one authorized real-data query. Then continue immediately and implement all of the following before you finish:
 
-**Phase 1 — Foundations**
-Migrations and typed models for connections, accounts, data sources, fields, governed metrics, reports/pages/components, goals, permissions, and jobs. Authorized query API and connector contract. Real Meta + Google Ads + Sheets paths, freshness/health, metric library, tests and instrumentation.
+- Connections, accounts, data sources, fields, governed metrics, formulas, blends, extracts, reports, pages, components, goals, permissions, and jobs.
+- Real Meta, Google Ads, Sheets, TikTok, GA4, Bing when credentials exist, Super App internal metrics, and Adnova paths, with freshness, health, and reconnect.
+- The full Designer and Viewer: every listed visualization, multi-page reports, controls, parameters, cross-filtering, drill-down, templates, themes, and draft/publish.
+- Click-to-select, drag-to-move, drag-to-resize, and drag-from-library placement for every chart and table, with persisted layout.
+- Per-chart and per-table color, font, border, label, column-width, and column-order customization, persisted and visible in viewer and exports.
+- Public links, embeds, PDF/JPG, CSV export, Monday 8am schedules, scorecards, alerts, audit, and admin health.
+- Tests, observability, runbooks, user help, and reconciliation against representative vendor reports.
 
-**Phase 2 — Usable Designer and Viewer**
-Responsive grid, report pages, autosave/conflict handling, number/line/bar/pie/table/funnel/progress/gauge/notes, date and dropdown controls, viewer, templates 1–3, batching, loading/error/empty states, accessibility, draft/publish. Phase 2 templates may use provider-native CPA or a versioned server-defined ratio metric; cross-source blended totals and the no-code formula UI remain Phase 4 requirements and must not be faked.
+Do not open a follow-up phase for charts, tables, styling, drag-and-drop, sharing, modeling, or connectors. Commit as you go, but do not treat an intermediate commit as completion. AI summary blocks are the only optional item; if included, ground them in the report data and label them as non-authoritative.
 
-**Phase 3 — Sharing and operations**
-Role-based sharing, public links, embed security, snapshot JPG/PDF, Monday 8am schedules, exports, scorecards, huddle template, alerts for spend/conversions, audit and admin health. Migrate selected Databox destinations behind a feature flag.
+Before finishing, run repository lint, typecheck, unit, integration, and end-to-end checks, then verify the full flow in the browser with authorized data: connect, build, drag and restyle charts and tables, reload, publish, view, filter, share, revoke, and schedule. Reconcile spend, clicks, and impressions. The cached 20-block viewer must meet the instrumented performance target. Critical accessibility, security, and load checks must pass. Record any human approval still required; do not self-declare that Databox or Looker Studio has been retired.
 
-**Phase 4 — Modeling and advanced reports**
-Custom/governed metrics, safe formula engine, calculated fields, reusable data sources, parameters, control scoping, cross-filtering, drill-down, explicit blends/relationships, extracts, pivot/advanced chart types, version impact analysis.
-
-**Phase 5 — Connector and delivery breadth**
-TikTok, GA4, Bing, Super App internals, Adnova, approved databases/warehouse/CSV/API; remaining visualizations; reusable themes; folders; anomaly alerts if justified; TV/loop if there is a kiosk use case; AI summary only with grounding, privacy, evaluation, and clear non-authoritative labeling.
-
-**Phase 6 — Replacement readiness**
-Parallel-run representative clients against Databox/Looker Studio, reconcile metric definitions and accepted discrepancies, load/security/accessibility tests, runbooks, migration tooling, user documentation, telemetry review, staged rollout, and explicit sign-off before retiring vendor workflows.
-
-Each phase must be independently deployable, demoable, documented, tested, and protected by feature flags where appropriate. Commit and report after each phase. Do not leave the Designer, connectors, exports, or schedules as mocks.
-
-For every phase:
-
-1. restate scope and unresolved decisions
-2. implement the smallest complete vertical slices
-3. add migrations, tests, observability, docs, and rollback path with the code
-4. run repository lint/typecheck/unit/integration checks
-5. perform browser verification using real authorized data
-6. update the capability matrix and list evidence, limitations, and next phase
-
-### Phase exit gates
-
-- **Phase 0:** the discovery artifact identifies real repository paths/services, resolves client KPI and user-client assignment sources, records open decisions, and proves one authorized real-data query.
-- **Phase 1:** Meta, Google Ads, and Sheets connector/query contract tests pass; multi-account isolation, timezone, freshness, retry/idempotency, and cache authorization are tested.
-- **Phase 2:** an authorized user creates a real-data report from a template, edits/reloads/publishes it, uses master date and dropdown controls, and views the published revision; no blend/parameter claims are required.
-- **Phase 3:** role share, public open/revoke, restricted public query envelope, PDF/JPG, one successful and one failed/retried schedule, scorecard, alert, and audit trail are demonstrated. Pilot migration covers Daily Spend/Daily Conversion destinations and Monday snapshot recipients discovered in Phase 0.
-- **Phase 4:** the safe formula engine, cross-source CPA, parameter/control scoping, explicit two-source blend with grain/fan-out validation, drill/cross-filter, extracts, and impact/version behavior pass tests.
-- **Phase 5:** every newly claimed connector/visualization has contract/accessibility/export tests and production-like data evidence; optional mobile stack ordering is implemented or documented as a limitation.
-- **Phase 6:** representative vendor reports reconcile, cached 20-block viewer meets the instrumented performance target, critical accessibility/security/load tests pass, runbooks and migration evidence exist, and remaining human product/security approval is clearly recorded. The agent must not self-declare vendor retirement.
-
-## Full product acceptance criteria (after Phase 6)
+## Acceptance criteria
 
 A Matchnode technical lead can:
 
 - Connect Meta + Google Ads for a client that already exists in the Super App, plus a Google Sheet of custom conversions.
 - Create a board from the **standard client weekly** template and have real numbers, not fixtures.
-- Drag, resize, duplicate, and reconfigure blocks; autosave survives reload.
+- Click a chart and a table, drag each to a new position, drag their corners to resize them, and see that arrangement after reload, in the viewer, and in the PDF/JPG.
+- Change a chart’s series color, background, title font, and axis font, and change a table’s header color, body font, column width, and column order. Those styles persist and appear in the viewer and export.
 - Change the board date range and see every eligible block update.
 - Create a calculated metric `Spend / Conversions` (CPA) blending Meta + Google.
 - Add a second page, a dropdown campaign filter, a typed parameter, and a cross-filtering chart; scope the controls and preview viewer behavior.
@@ -651,13 +655,11 @@ Do not finish with only code. Deliver:
 ## Suggested first message to yourself after the repo is open
 
 1. Inventory routes, nav, auth, client model, and existing insights fetching.
-2. Create the discovery artifact, capability matrix, role matrix, and architecture proposal; identify assumptions that need product/security decisions.
-3. Implement one secure vertical slice against real Meta or Google data: connection mapping → governed metric → query → scorecard chart → saved report → authorized viewer.
-4. Expand Phase 1–2 with Sheets, Designer, controls, templates, and publish.
-5. Add public sharing, deliveries, scorecards, alerts, and onboarding only after authorization and query correctness tests pass.
-6. Add advanced modeling/blending and connector breadth without regressing the simple metrics-first flow.
+2. Write the discovery artifact, then keep going. Do not end the task there.
+3. Implement the entire BI module in this prompt: data platform, all priority connectors, semantic model, Designer, every visualization, click-and-drag layout, chart and table styling, viewer, templates, sharing, deliveries, scorecards, goals, and alerts.
+4. Verify the complete user flow, including dragging and restyling charts and tables, before calling the work done.
 
-Work through the phases until the Super App contains a production-ready, first-party BI module combining Databox-style operational dashboards with Looker Studio-style interactive reporting and modeling. Be precise in every update about what is production-ready, what is usable but limited, and what remains.
+Finish only when the Super App contains the complete first-party BI module described here, with Databox-style operational dashboards and Looker Studio-style interactive reporting in the same release. Be precise about any external blocker, and do not describe an unfinished area as complete.
 
 ---
 
