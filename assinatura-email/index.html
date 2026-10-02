@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de Assinatura de E-mail — Lucas Braz Queiroz</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span>Gerador de Assinatura de E-mail</span>
+    </div>
+    <span class="hint">Preencha os campos, escolha o estilo e copie para o seu cliente de e-mail.</span>
+  </header>
+
+  <main class="layout">
+    <section class="panel form-panel" aria-label="Dados da assinatura">
+      <h2>Dados</h2>
+
+      <div class="field">
+        <label for="nome">Nome completo</label>
+        <input id="nome" type="text" value="Lucas Braz Queiroz" />
+      </div>
+
+      <div class="field">
+        <label for="cargo">Cargo</label>
+        <input id="cargo" type="text" value="Analista de Dados • Marketing" />
+      </div>
+
+      <div class="field">
+        <label for="empresa">Empresa</label>
+        <input id="empresa" type="text" placeholder="Nome da empresa" />
+      </div>
+
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" placeholder="lucas@empresa.com" />
+      </div>
+
+      <div class="field">
+        <label for="telefone">Telefone / WhatsApp</label>
+        <input id="telefone" type="tel" placeholder="+55 (11) 9 9999-9999" />
+      </div>
+
+      <div class="field">
+        <label for="linkedin">LinkedIn</label>
+        <input id="linkedin" type="url" placeholder="https://linkedin.com/in/seu-perfil" />
+      </div>
+
+      <div class="field">
+        <label for="site">Site / Portfólio</label>
+        <input id="site" type="url" placeholder="https://seusite.com" />
+      </div>
+
+      <div class="field">
+        <label for="foto">Foto (URL pública, opcional)</label>
+        <input id="foto" type="url" placeholder="https://.../foto.jpg" />
+      </div>
+
+      <div class="field">
+        <label for="tagline">Frase curta (opcional)</label>
+        <input id="tagline" type="text" value="Transformando dados em decisões de marketing" />
+      </div>
+
+      <h2>Estilo</h2>
+
+      <div class="field">
+        <label>Template</label>
+        <div class="segmented" role="radiogroup" id="templates">
+          <label><input type="radio" name="template" value="moderno" checked /><span>Moderno</span></label>
+          <label><input type="radio" name="template" value="classico" /><span>Clássico</span></label>
+          <label><input type="radio" name="template" value="minimal" /><span>Minimalista</span></label>
+        </div>
+      </div>
+
+      <div class="field row">
+        <div>
+          <label for="cor">Cor de destaque</label>
+          <input id="cor" type="color" value="#0F62FE" />
+        </div>
+        <div>
+          <label for="fonte">Fonte</label>
+          <select id="fonte">
+            <option value="Arial, Helvetica, sans-serif">Arial</option>
+            <option value="Verdana, Geneva, sans-serif">Verdana</option>
+            <option value="Georgia, 'Times New Roman', serif">Georgia</option>
+            <option value="'Trebuchet MS', Tahoma, sans-serif">Trebuchet</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel preview-panel" aria-label="Pré-visualização">
+      <div class="preview-header">
+        <h2>Pré-visualização</h2>
+        <div class="actions">
+          <button id="copiar-rich" class="btn primary" type="button">Copiar assinatura</button>
+          <button id="copiar-html" class="btn" type="button">Copiar HTML</button>
+          <button id="baixar" class="btn" type="button">Baixar .html</button>
+        </div>
+      </div>
+
+      <div class="mail-mock">
+        <div class="mail-mock-header">
+          <div><strong>Para:</strong> equipe@empresa.com</div>
+          <div><strong>Assunto:</strong> Relatório semanal de performance</div>
+        </div>
+        <div class="mail-mock-body">
+          <p>Olá, equipe,</p>
+          <p>Segue o relatório com os principais indicadores da semana. Qualquer dúvida, estou à disposição.</p>
+          <p>Abraços,</p>
+          <div id="preview" class="signature-preview"></div>
+        </div>
+      </div>
+
+      <details class="code-details">
+        <summary>Ver código HTML</summary>
+        <pre><code id="codigo"></code></pre>
+      </details>
+
+      <div class="instructions">
+        <h3>Como instalar</h3>
+        <ul>
+          <li><strong>Gmail:</strong> Configurações → Ver todas as configurações → Assinatura → Criar nova → cole (Ctrl+V) a assinatura copiada.</li>
+          <li><strong>Outlook (web):</strong> Configurações → E-mail → Redigir e responder → Assinatura de e-mail → cole.</li>
+          <li><strong>Outlook (desktop):</strong> Arquivo → Opções → E-mail → Assinaturas → Novo → cole.</li>
+          <li><strong>Apple Mail:</strong> Mail → Ajustes → Assinaturas → "+" → cole.</li>
+        </ul>
+        <p class="note">Dica: a foto precisa estar hospedada em uma URL pública (ex.: LinkedIn, Google Drive com link direto, ou seu site) para aparecer para os destinatários.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
