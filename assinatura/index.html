@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assinatura para documentos — Lucas Braz Queiroz</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23163a86'/%3E%3Cpath d='M5 21c5-1 7-9 9-9s3 7 13 5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <strong>Assinatura para documentos</strong>
+        <span>Lucas Braz Queiroz</span>
+      </div>
+    </div>
+    <p class="hint">Um traço estável do seu nome, para contratos, propostas e PDFs.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel controls" aria-label="Ajustes da assinatura">
+      <h2>Como assinar</h2>
+      <div class="field">
+        <label for="texto">Texto da assinatura</label>
+        <input id="texto" type="text" maxlength="60" value="Lucas Braz Queiroz" autocomplete="off" />
+        <div class="chips" role="group" aria-label="Formas do nome">
+          <button type="button" class="chip" data-for="texto" data-value="Lucas Braz Queiroz">Nome completo</button>
+          <button type="button" class="chip" data-for="texto" data-value="Lucas B. Queiroz">Com inicial</button>
+          <button type="button" class="chip" data-for="texto" data-value="Lucas Queiroz">Nome e sobrenome</button>
+        </div>
+      </div>
+
+      <h2>Estilo</h2>
+      <div id="estilos" class="style-grid" role="radiogroup" aria-label="Estilo da assinatura"></div>
+
+      <h2>Tinta</h2>
+      <div id="tintas" class="ink-row" role="radiogroup" aria-label="Cor da tinta"></div>
+      <p class="micro">Azul se destaca do texto impresso em preto. Preto funciona melhor em documento já colorido.</p>
+
+      <label class="check">
+        <input id="traco" type="checkbox" checked />
+        <span>Incluir o traço final sob o nome</span>
+      </label>
+
+      <h2>Rubrica</h2>
+      <p class="micro">Marca curta para vistar as páginas. A assinatura completa fica no fecho do documento.</p>
+      <div class="field">
+        <label for="rubrica">Texto da rubrica</label>
+        <input id="rubrica" type="text" maxlength="40" value="L. Queiroz" autocomplete="off" />
+        <div class="chips" role="group" aria-label="Formas da rubrica">
+          <button type="button" class="chip" data-for="rubrica" data-value="L. Queiroz">L. Queiroz</button>
+          <button type="button" class="chip" data-for="rubrica" data-value="LQueiroz">LQueiroz</button>
+          <button type="button" class="chip" data-for="rubrica" data-value="LBQ">LBQ</button>
+        </div>
+      </div>
+
+      <h2>No exemplo</h2>
+      <div class="field">
+        <label for="nome-extenso">Nome impresso abaixo do traço</label>
+        <input id="nome-extenso" type="text" maxlength="80" value="Lucas Braz Queiroz" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="linha">Linha opcional</label>
+        <input id="linha" type="text" maxlength="80" placeholder="ex.: Marketing e Dados" autocomplete="off" />
+      </div>
+    </section>
+
+    <section class="panel preview" aria-label="Pré-visualização">
+      <div class="preview-head">
+        <h2>Pré-visualização</h2>
+        <div class="actions">
+          <button id="baixar-png" class="btn primary" type="button">PNG da assinatura</button>
+          <button id="baixar-svg" class="btn" type="button">SVG da assinatura</button>
+          <button id="baixar-rubrica-png" class="btn" type="button">PNG da rubrica</button>
+          <button id="baixar-rubrica-svg" class="btn" type="button">SVG da rubrica</button>
+        </div>
+      </div>
+      <label class="check tight">
+        <input id="fundo" type="checkbox" />
+        <span>PNG com fundo branco (o SVG continua transparente)</span>
+      </label>
+
+      <div class="hero checker">
+        <figure>
+          <figcaption>Assinatura</figcaption>
+          <img id="preview-assinatura" alt="Assinatura de Lucas Braz Queiroz" />
+        </figure>
+        <figure class="hero-rubrica">
+          <figcaption>Rubrica</figcaption>
+          <img id="preview-rubrica" alt="Rubrica de Lucas Braz Queiroz" />
+        </figure>
+      </div>
+      <p class="micro">O xadrez não faz parte do arquivo: é só para mostrar o fundo transparente.</p>
+
+      <div class="mocks">
+        <article class="doc" aria-label="Documento de exemplo">
+          <p class="kicker">Documento de exemplo</p>
+          <h3>Termo de ciência</h3>
+          <p>Declaro que li as condições deste documento e as aceito.</p>
+          <p id="doc-data" class="date"></p>
+          <div class="sign-slot">
+            <div class="sign-art">
+              <img id="doc-assinatura" alt="" />
+              <div class="line"></div>
+            </div>
+            <strong id="doc-nome">Lucas Braz Queiroz</strong>
+            <span id="doc-cargo" hidden></span>
+          </div>
+        </article>
+
+        <article class="folha" aria-label="Rubrica na página">
+          <p class="kicker">Página interna</p>
+          <div class="linhas">
+            <img id="doc-rubrica" alt="Rubrica no canto da página" />
+          </div>
+          <span class="folha-label">visto</span>
+        </article>
+      </div>
+
+      <div class="help">
+        <h3>Como usar</h3>
+        <ul>
+          <li><strong>Word:</strong> Inserir → Imagens, e posicione o PNG sobre a linha de assinatura.</li>
+          <li><strong>Google Docs:</strong> Inserir → Imagem → Fazer upload.</li>
+          <li><strong>PDF:</strong> cole a imagem sobre a linha, no leitor ou no editor que você já usa.</li>
+          <li><strong>Páginas internas:</strong> use a rubrica, menor, no canto de cada folha.</li>
+        </ul>
+        <p class="note">Escolha um estilo e repita sempre o mesmo: assinatura boa é a que não muda. Onde a lei pede firma reconhecida ou certificado digital (ICP-Brasil), este desenho não substitui o cartório nem o certificado.</p>
+      </div>
+      <p id="status" class="status" role="status"></p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="vendor/opentype.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

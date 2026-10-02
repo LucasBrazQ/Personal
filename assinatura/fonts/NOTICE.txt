@@ -1,0 +1,8 @@
+Fontes incluídas neste projeto, sob a SIL Open Font License 1.1
+(texto completo em OFL.txt):
+
+- Alex Brush — Copyright 2011 The Alex Brush Project Authors (https://github.com/googlefonts/alex-brush)
+- Allura — Copyright 2010 The Allura Project Authors (https://github.com/googlefonts/allura)
+- Great Vibes — Copyright 2010 The Great Vibes Pro Project Authors (https://github.com/googlefonts/great-vibes)
+- Pinyon Script — Copyright 2022 The PinyonScript Project Authors (https://github.com/SorkinType/Pinyon)
+- Sacramento — Copyright 2012 Brian J. Bonislawsky (Astigmatic)
