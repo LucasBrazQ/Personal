@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to create CallRail website pool numbers</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --bg: #fafaf9;
+      --card: #ffffff;
+      --accent: #1d4e89;
+      --accent-soft: #e8f0f8;
+      --warn: #7c4a03;
+      --warn-bg: #fff7ed;
+      --ok: #14532d;
+      --ok-bg: #f0fdf4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.55 Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    }
+    header, main { max-width: 820px; margin: 0 auto; padding: 40px 24px; }
+    header { padding-bottom: 8px; }
+    h1 { font-size: 32px; line-height: 1.2; margin: 0 0 12px; letter-spacing: -0.02em; }
+    h2 { font-size: 22px; margin: 36px 0 10px; }
+    h3 { font-size: 17px; margin: 22px 0 8px; }
+    p, li { color: var(--ink); }
+    .lede { font-size: 18px; color: var(--muted); margin-top: 0; }
+    .meta { color: var(--muted); font-family: "Segoe UI", sans-serif; font-size: 13px; }
+    a { color: var(--accent); }
+    ol.steps { padding-left: 22px; }
+    ol.steps > li { margin: 0 0 10px; }
+    figure {
+      margin: 16px 0 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 12px;
+    }
+    figure img { width: 100%; height: auto; display: block; }
+    figcaption {
+      font-family: "Segoe UI", sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; background: var(--card); margin: 12px 0 20px; }
+    th, td { border: 1px solid var(--line); text-align: left; padding: 8px 10px; vertical-align: top; font-family: "Segoe UI", sans-serif; font-size: 14px; }
+    th { background: #f5f5f4; }
+    code, .url {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      background: #f5f5f4;
+      padding: 1px 4px;
+    }
+    .url { display: block; padding: 10px 12px; margin: 8px 0 14px; overflow-wrap: anywhere; }
+    .note, .warn {
+      font-family: "Segoe UI", sans-serif;
+      font-size: 15px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      border: 1px solid var(--line);
+    }
+    .note { background: var(--accent-soft); }
+    .warn { background: var(--warn-bg); }
+    .ok { background: var(--ok-bg); border: 1px solid var(--line); padding: 12px 14px; font-family: "Segoe UI", sans-serif; }
+    footer { max-width: 820px; margin: 0 auto; padding: 0 24px 48px; color: var(--muted); font-family: "Segoe UI", sans-serif; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="meta">Client guide · CallRail website pools for Google Ads and Meta</p>
+    <h1>How to create CallRail website pool numbers</h1>
+    <p class="lede">A website pool is a set of at least four tracking numbers. When someone reaches the site from Google Ads or a Meta ad, the phone number on the page changes to one of those numbers. The call still rings the clinic. CallRail records which ad the caller came from.</p>
+  </header>
+  <main>
+    <h2>Before you start</h2>
+    <ul>
+      <li>Open the correct clinic in CallRail. Each clinic is its own company. A pool created in one company does not work on another clinic’s website.</li>
+      <li>Find the phone number printed on that clinic’s <span class="url" style="display:inline;padding:0 4px">/arcgrowth</span> page. The pool must swap that exact number.</li>
+      <li>Meta ads must use this URL ending. The <code>utm_source=meta</code> part is what CallRail looks for.</li>
+    </ul>
+    <p class="url">utm_source=meta&amp;utm_medium=paid_social&amp;utm_campaign={{campaign.name}}&amp;utm_content={{adset.name}} - {{ad.name}}</p>
+
+    <h2>1. Create the website pool</h2>
+    <ol class="steps">
+      <li>In CallRail, click <strong>Create Number</strong>, or the <strong>+</strong> icon, then <strong>Phone Number</strong>.</li>
+      <li>Choose the clinic.</li>
+      <li>Where will you display this number? Choose <strong>On my website</strong>.</li>
+      <li>Choose <strong>Calls, keywords, &amp; web sessions</strong>. This is the website pool. Do not choose “Calls only.”</li>
+      <li>Enter the clinic’s real phone number as the number calls should ring.</li>
+      <li>On the source step, you can leave the default for now. You will set Google and Meta in the next section.</li>
+      <li>Name the pool so the clinic is obvious, for example <strong>Website Pool</strong>.</li>
+      <li>Pool size: start with <strong>4</strong> numbers. That is CallRail’s minimum. Use a local area code that matches the clinic.</li>
+      <li>Turn on call recording if the clinic wants recordings. Click <strong>Activate Tracking Number</strong>.</li>
+    </ol>
+    <div class="note">Creating the pool does not change the website yet. The number on the page changes only after the tracking script is installed, in section 4.</div>
+
+    <h2>2. Set the swap target</h2>
+    <p>The swap target is the number CallRail looks for on the website and replaces.</p>
+    <ol class="steps">
+      <li>Go to <strong>Settings</strong>, choose the clinic, and open the website pool.</li>
+      <li>In <strong>Number insertion options</strong>, set <strong>Swap target</strong> to the digits of the number on the <code>/arcgrowth</code> page. No spaces or dashes. Example: a page that shows 216-450-1613 uses <code>2164501613</code>.</li>
+      <li>If the page shows a second call number, click <strong>Enable multiple swap targets</strong> and add it. Do not add a fax number.</li>
+    </ol>
+
+    <h2>3. Track Google Ads and Meta</h2>
+    <p>Stay in <strong>Number insertion options</strong>. Open <strong>Advanced tracking</strong>.</p>
+    <ol class="steps">
+      <li>Select <strong>Show a tracking number to only the following visitors</strong>.</li>
+      <li>First row: left column <strong>Source</strong>, value <strong>Google Ads</strong>.</li>
+      <li>Click <strong>+ Add included source</strong>.</li>
+      <li>Second row: change the left column from Source to <strong>Landing page</strong>. In the value box, type exactly <code>utm_source=meta</code>.</li>
+      <li>Click <strong>Save</strong>. Reopen the pool and confirm both rows are still there.</li>
+    </ol>
+    <figure>
+      <img src="images/tracking-sources.png" alt="CallRail advanced tracking with Source set to Google Ads and Landing page set to utm_source=meta">
+      <figcaption>Figure 1. The finished source rules. Google Ads stays on Source. Meta is a Landing page rule, not a Source.</figcaption>
+    </figure>
+    <div class="warn">
+      <strong>Do not add Meta from the Source list.</strong> That list does not include Facebook or Instagram. PPC in that list is Google, Bing, and Yahoo search, not Meta.
+    </div>
+    <figure>
+      <img src="images/source-options.png" alt="CallRail source dropdown showing PPC, Organic search, Direct, ChatGPT Ads, and Google Ads">
+      <figcaption>Figure 2. These are the only Source values. None of them is Meta. Use Landing page for <code>utm_source=meta</code>.</figcaption>
+    </figure>
+
+    <h2>4. Put the CallRail script on the landing page</h2>
+    <p>Each clinic has its own script in CallRail. Copy it from that clinic. Pasting one clinic’s script onto another clinic’s site will not swap the number.</p>
+    <p>In CallRail: open the clinic, then the JavaScript snippet (the install code). Copy the whole <code>&lt;script&gt;</code> line.</p>
+    <p>In that same clinic’s Ours Privacy tag manager:</p>
+    <ol class="steps">
+      <li>Create a Custom HTML tag. A clear name is <strong>CallRail Website Pool</strong>.</li>
+      <li>Paste only that clinic’s script.</li>
+      <li>Set <strong>HTML position</strong> to <strong>Body End</strong>.</li>
+      <li>Leave priority at <strong>0</strong>.</li>
+    </ol>
+    <figure>
+      <img src="images/ours-tag.png" alt="Ours Privacy custom HTML tag with the CallRail script and Body End position">
+      <figcaption>Figure 3. The tag type is Custom HTML, the script is that clinic’s CallRail snippet, and the position is Body End.</figcaption>
+    </figure>
+    <p>The tag should fire only on the paid landing page, after the phone number is on the page.</p>
+    <ol class="steps">
+      <li>Create a trigger named <strong>Paid LP Viewed</strong>.</li>
+      <li>Set the trigger type to <strong>DOM Ready</strong>, not Page View. Page View runs before the phone number exists, so the swap can miss it.</li>
+      <li>Fire on <strong>Some Events</strong>.</li>
+      <li>Condition: <strong>Page Path</strong> <strong>contains</strong> <code>/arcgrowth</code>.</li>
+      <li>Attach that trigger to the CallRail tag.</li>
+    </ol>
+    <figure>
+      <img src="images/ours-trigger.png" alt="Trigger limited to page paths that contain /arcgrowth">
+      <figcaption>Figure 4. Keep the path condition. Change the trigger type in the top dropdown from Page View to DOM Ready before you publish.</figcaption>
+    </figure>
+    <div class="note"><strong>Publish the container.</strong> Saving the tag keeps a draft. The live site does not load the script until you publish the version in Ours Privacy.</div>
+
+    <h2>5. Test both sources</h2>
+    <p>Use a new private window for each test. Close other private windows first. Accept the cookie banner so the tag can run.</p>
+    <h3>Google Ads</h3>
+    <p class="url">https://the-clinic-site/arcgrowth/?gclid=test</p>
+    <h3>Meta</h3>
+    <p class="url">https://the-clinic-site/arcgrowth/?utm_source=meta&amp;utm_medium=paid_social&amp;fbclid=test</p>
+    <p>The number on the page should change from the clinic’s real number to a pool number. A link that only has <code>?utm_source=meta</code> is not a valid Meta test. CallRail treats that visit as direct, and this pool does not swap for direct visitors.</p>
+    <div class="ok">If the number does not change, open the browser’s Network tab and look for <code>swap.js</code>. If that file never loads, the Ours tag is unpublished or the trigger did not fire. If it loads and the number stays the same, the script is from a different clinic, or the swap target does not match the number on the page.</div>
+
+    <h2>Settings to copy</h2>
+    <table>
+      <thead>
+        <tr><th>Setting</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Pool type</td><td>On my website → Calls, keywords, &amp; web sessions</td></tr>
+        <tr><td>Pool size</td><td>4 local numbers</td></tr>
+        <tr><td>Swap target</td><td>The call number printed on /arcgrowth, digits only</td></tr>
+        <tr><td>Who sees a tracking number</td><td>Only the following visitors</td></tr>
+        <tr><td>Row 1</td><td>Source → Google Ads</td></tr>
+        <tr><td>Row 2</td><td>Landing page → utm_source=meta</td></tr>
+        <tr><td>Website tag</td><td>That clinic’s own CallRail script, Body End</td></tr>
+        <tr><td>Trigger</td><td>DOM Ready, page path contains /arcgrowth</td></tr>
+      </tbody>
+    </table>
+  </main>
+  <footer>
+    Repeat sections 1 through 5 once per clinic. Do not copy a pool, a swap target, or a CallRail script from one clinic to another.
+  </footer>
+</body>
+</html>
