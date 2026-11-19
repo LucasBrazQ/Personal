@@ -145,17 +145,17 @@
       <img src="images/ours-tag.png" alt="Ours Privacy custom HTML tag with the CallRail script and Body End position">
       <figcaption>Figure 3. The tag type is Custom HTML, the script is that clinic’s CallRail snippet, and the position is Body End.</figcaption>
     </figure>
-    <p>The tag should fire only on the paid landing page, after the phone number is on the page.</p>
+    <p>The tag should fire on Page View, and only on the paid landing page.</p>
     <ol class="steps">
       <li>Create a trigger named <strong>Paid LP Viewed</strong>.</li>
-      <li>Set the trigger type to <strong>DOM Ready</strong>, not Page View. Page View runs before the phone number exists, so the swap can miss it.</li>
+      <li>Set the trigger type to <strong>Page View</strong>. CallRail’s instructions for installing the snippet through a tag manager use Page View, not DOM Ready. The script loads immediately and waits for the page itself before it swaps the number.</li>
       <li>Fire on <strong>Some Events</strong>.</li>
       <li>Condition: <strong>Page Path</strong> <strong>contains</strong> <code>/arcgrowth</code>.</li>
       <li>Attach that trigger to the CallRail tag.</li>
     </ol>
     <figure>
       <img src="images/ours-trigger.png" alt="Trigger limited to page paths that contain /arcgrowth">
-      <figcaption>Figure 4. Keep the path condition. Change the trigger type in the top dropdown from Page View to DOM Ready before you publish.</figcaption>
+      <figcaption>Figure 4. Page View is the correct trigger type. Keep the path condition so the script runs only on /arcgrowth.</figcaption>
     </figure>
     <div class="note"><strong>Publish the container.</strong> Saving the tag keeps a draft. The live site does not load the script until you publish the version in Ours Privacy.</div>
 
@@ -181,7 +181,7 @@
         <tr><td>Row 1</td><td>Source → Google Ads</td></tr>
         <tr><td>Row 2</td><td>Landing page → utm_source=meta</td></tr>
         <tr><td>Website tag</td><td>That clinic’s own CallRail script, Body End</td></tr>
-        <tr><td>Trigger</td><td>DOM Ready, page path contains /arcgrowth</td></tr>
+        <tr><td>Trigger</td><td>Page View, page path contains /arcgrowth</td></tr>
       </tbody>
     </table>
   </main>
