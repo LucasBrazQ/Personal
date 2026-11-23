@@ -2,16 +2,17 @@ DAVI SOARES QUEIROZ
 
 E-mail: daviqueiroz2510@gmail.com
 Telefone: (31) 99687-2667
+Localização: Santa Luzia - MG
 
 OBJETIVO
 
-Primeiro emprego em funções administrativas, de atendimento ou de apoio operacional, aplicando conhecimento avançado em informática e ferramentas digitais, facilidade de aprendizado e comprometimento com as responsabilidades da função.
+Vaga de Jovem Aprendiz em funções administrativas, de atendimento ou de apoio operacional, aplicando conhecimento avançado em informática e ferramentas digitais, facilidade de aprendizado e comprometimento com as responsabilidades da função.
 
 FORMAÇÃO ACADÊMICA
 
 Ensino Médio
 Colégio Magnum Agostiniano
-Conclusão: [ano de conclusão]
+Conclusão prevista: 2026
 
 IDIOMAS
 
