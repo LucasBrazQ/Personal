@@ -6,7 +6,7 @@ Localização: Santa Luzia - MG
 
 OBJETIVO
 
-Vaga de Jovem Aprendiz em funções administrativas, de atendimento ou de apoio operacional, aplicando conhecimento avançado em informática e ferramentas digitais, facilidade de aprendizado e comprometimento com as responsabilidades da função.
+Vaga de Jovem Aprendiz nas áreas administrativa ou de atendimento, para apoiar rotinas de escritório, organização de documentos digitais e comunicação com clientes e colegas. Conhecimento avançado no pacote Office (Word, Excel e PowerPoint), inglês intermediário e disposição para aprender na prática e crescer dentro da empresa.
 
 FORMAÇÃO ACADÊMICA
 
